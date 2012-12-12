@@ -1,0 +1,35 @@
+# Maintainer: Your Name <youremail@domain.com>
+pkgname=pax
+pkgver=3.4
+pkgrel=1
+pkgdesc="compress / depressing utils"
+arch=('i686', 'x86_64')
+url="http://ftp.suse.com/"
+license=('GPL')
+groups=()
+depends=()
+makedepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("http://ftp.suse.com/pub/people/kukuk/pax/$pkgname-$pkgver.tar.bz2")
+noextract=()
+md5sums=('fbd9023b590b45ac3ade95870702a0d6') #generate with 'makepkg -g'
+
+build() {
+    cd "$srcdir/$pkgname-$pkgver"
+    # "-Werror" flag capture indicates error, so I delete it.
+    sed -i 's/-Werror//g' configure.in
+    ./configure --prefix=/usr
+    make
+}
+
+package() {  
+    cd "$srcdir/$pkgname-$pkgver"
+    make DESTDIR="$pkgdir/" install
+}

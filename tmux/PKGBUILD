@@ -1,0 +1,26 @@
+
+pkgname=tmux
+pkgver=1.6
+pkgrel=5
+pkgdesc='A tool to multi text window'
+arch=('i686' 'x86_64')
+license=('custom')
+url='http://downloads.sourceforge.net'
+makedepends=('libevent')
+source=("http://downloads.sourceforge.net/project/tmux/tmux/tmux-$pkgver/tmux-$pkgver.tar.gz")
+md5sums=('3e37db24aa596bf108a0442a81c845b3')
+
+build() {
+    # 256 colors bug
+    patch $pkgname-$pkgver/tty.c < ../patch.diff
+    echo "patch 256 colors bug"
+    cd $pkgname-$pkgver
+    ./configure --prefix=/usr
+    make
+}
+
+package() {
+    pushd $pkgname-$pkgver
+    make DESTDIR="$pkgdir" install
+    popd
+}

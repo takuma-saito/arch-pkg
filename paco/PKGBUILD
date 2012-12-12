@@ -1,0 +1,25 @@
+
+pkgname=paco
+pkgver=2.0.9
+pkgrel=5
+pkgdesc='A tool to manage pkg'
+arch=('i686' 'x86_64')
+license=('custom')
+url='http://downloads.sourceforge.net'
+# depends=('gcc-libs')
+source=("http://downloads.sourceforge.net/project/paco/paco/$pkgver/paco-$pkgver.tar.gz")
+md5sums=('50dcf5d6378b5d0c017cc866ea5918ad')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr \
+              --disable-gpaco
+  make
+}
+
+package() {
+  pushd $pkgname-$pkgver
+  make install
+  make logme
+  popd
+}

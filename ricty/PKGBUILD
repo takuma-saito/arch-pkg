@@ -1,0 +1,49 @@
+
+pkgname=Ricty
+pkgver=3.1
+pkgrel=5
+pkgdesc='A tool to manage pkg'
+arch=('i686' 'x86_64')
+license=('custom')
+url='http://downloads.sourceforge.net'
+font_migu="migu-1m-20120411-2"
+font_incon="Inconsolata"
+font_dir="/usr/share/fonts"
+depends=('git')
+makedepends=('fontforge' 'unzip')
+source=(
+    "http://levien.com/type/myfonts/${font_incon}.otf"
+    "http://sourceforge.jp/frs/redir.php?m=jaist&f=%2Fmix-mplus-ipa%2F56156%2F${font_migu}.zip"
+)
+md5sums=(
+    '0fbe014c1f0fb5e3c71140ff0dc63edf'
+    '8c0c8a7fa16f748fdca1e2942d78abff'
+)
+
+# install dependency fonts
+deps_fonts_install() {
+    local dir_otf="${font_dir}/OTF/"
+    local dir_ttf="${font_dir}/TTF/"
+    [[ ! -d $otf ]] || mkdir $dir_otf
+    [[ ! -d $ttf ]] || mkdir $dir_ttf
+    cp "${font_incon}.otf" $dir_otf
+    unzip "redir.php?m=jaist&f=%2Fmix-mplus-ipa%2F56156%2Fmigu-1m-20120411-2.zip"
+    pushd .
+    cd $font_migu
+    cp *.ttf $dir_ttf
+    popd
+}
+
+build() {
+    deps_fonts_install
+    git clone https://github.com/yascentur/Ricty
+    cd Ricty
+    sh ricty_generator.sh auto
+}
+
+package() {
+    pushd .
+    cd Ricty
+    cp -f Ricty*.ttf "${font_dir}/TTF/"    
+    popd
+}
